@@ -1,0 +1,64 @@
+<template>
+    <lightning-card title="Bulk Edit Contact">
+        <div class="slds-m-around_medium">
+            <!--<lightning-button label="Bulk Update" onclick={handleBulkUpdate} class="slds-m-right_small"></lightning-button>-->
+            <lightning-button label="Bulk Delete" onclick={handleBulkDelete}></lightning-button>
+        </div>
+        
+        <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+            <thead>
+                <tr>
+                    <th><lightning-input type="checkbox" onchange={handleSelectAll}></lightning-input></th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Birthdate</th>
+                    <th>Phone</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={contacts} for:item="contact">
+                    <tr key={contact.Id}>
+                        <td>
+                            <lightning-input type="checkbox" data-id={contact.Id} onchange={handleSelect}></lightning-input>
+                        </td>
+                        <td>{contact.FirstName}</td>
+                        <td>{contact.LastName}</td>
+                        <td>{contact.Email}</td>
+                        <td>{contact.Birthdate}</td>
+                        <td>{contact.Phone}</td>
+                        <td>
+                            <lightning-button label="Edit" data-id={contact.Id} onclick={handleEdit} variant="brand"></lightning-button>
+                        </td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+    </lightning-card>
+
+    <template if:true={isModalOpen}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                    </button>
+                    <h2 class="slds-text-heading_medium">Edit Contact</h2>
+                </header>
+                <div class="slds-modal__content">
+                    <lightning-input label="First Name" value={selectedContact.FirstName} data-field="FirstName" onchange={handleFieldChange}></lightning-input>
+                    <lightning-input label="Last Name" value={selectedContact.LastName} data-field="LastName" onchange={handleFieldChange}></lightning-input>
+                    <lightning-input label="Email" value={selectedContact.Email} data-field="Email" onchange={handleFieldChange}></lightning-input>
+                    <lightning-input label="Birthdate" value={selectedContact.Birthdate} data-field="Birthdate" onchange={handleFieldChange} type="date"></lightning-input>
+                    <lightning-input label="Phone" value={selectedContact.Phone} data-field="Phone" onchange={handleFieldChange}></lightning-input>
+                </div>
+                <footer class="slds-modal__footer">
+                    <lightning-button variant="neutral" label="Cancel" onclick={closeModal}></lightning-button>
+                    <lightning-button variant="brand" label="Save" onclick={saveContact}></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>
